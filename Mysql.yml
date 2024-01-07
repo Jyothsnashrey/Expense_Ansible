@@ -24,10 +24,10 @@
       - name: Disable Mysql Module
         ansible.builtin.shell: dnf module disable mysql -y
 
-      - name: Copy Expense configuration file
+      - name: Copy mysql repo file
         ansible.builtin.copy:
-        src: mysql.repo
-        dest: /etc/yum.repos.d/mysql.repo
+          src: mysql.repo
+          dest: /etc/yum.repos.d/mysql.repo
 
       - name: Install mysql community server
         ansible.builtin.dnf:
