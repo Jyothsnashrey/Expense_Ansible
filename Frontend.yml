@@ -35,7 +35,8 @@
   hosts: all
   become: true
   tasks:
-    -name: Install Nginx
-     ansible.builtin.dnf:
-       name: nginx
-       state: installed
+    - name: Nginx install
+      ansible.builtin.dnf:
+        name: nginx
+        state: installed
+
