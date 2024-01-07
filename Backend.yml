@@ -95,10 +95,16 @@
         state: restarted
         enabled: yes
 
-    - name: Install mysql community server
+    - name: Install mysql client
       ansible.builtin.dnf:
         name: mysql
         state: installed
+
+    - name: Install Phyton Library
+      ansible.builtin.dnf:
+        name: phyton3-pyMySQL
+        state: installed
+
 
     - name: Load Schema
       community.mysql.mysql_db:
@@ -108,3 +114,4 @@
         login_user: root
         Login_password: ExpenseApp@1
         Login_host: mysql-dev.jyothsnashrey.online
+
