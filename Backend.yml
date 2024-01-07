@@ -1,48 +1,110 @@
-Mysql_Password=$1
-if [ -z "$Mysql_Password" ]; then
-echo Input Mysql_Password is missing
-exit 1
-fi
-component=backend
-source Common.sh
-Head "disable default version of nodejs"
-dnf module disable nodejs -y &>>log_file
+#Mysql_Password=$1
+#if [ -z "$Mysql_Password" ]; then
+#echo Input Mysql_Password is missing
+#exit 1
+#fi
+#component=backend
+#source Common.sh
+#Head "disable default version of nodejs"
+#dnf module disable nodejs -y &>>log_file
+#
+#Stat $?
+#Head "enable node js version"
+#dnf module enable nodejs:18 -y &>>log_file
+#Stat $?
+#Head "Install nodejs"
+#dnf install nodejs -y &>>log_file
+#Stat $?
+#Head "Configure backend service"
+#cp  backend.service /etc/systemd/system/backend.service &>>log_file
+#Stat $?
+#
+#Head "Adding Application User"
+#if [ "$?" -ne 0 ]; then
+#useradd expense &>>log_file
+#fi
+#
+#App_prereq "/app"
+#
+#Head "Downloading application content"
+#npm install &>>log_file
+#Stat $?
+#
+#Head "Reloading my application content and restarting service"
+#
+#systemctl daemon-reload &>>log_file
+#
+#systemctl enable backend &>>log_file
+#systemctl start backend &>>log_file
+#systemctl restart backend &>>log_file
+#Stat $?
+#Head "Install mysql client"
+#
+#dnf install mysql -y &>>log_file
+#Stat $?
+#mysql -h mysql-dev.jyothsnashrey.online -uroot -p${Mysql_Password} < /app/schema/backend.sql
+#Stat $?
 
-Stat $?
-Head "enable node js version"
-dnf module enable nodejs:18 -y &>>log_file
-Stat $?
-Head "Install nodejs"
-dnf install nodejs -y &>>log_file
-Stat $?
-Head "Configure backend service"
-cp  backend.service /etc/systemd/system/backend.service &>>log_file
-Stat $?
+- name: Backend setup
+  hosts: all
+  become: true
+  tasks:
+    - name: Disable default version
+      ansible.builtin.shell: dnf module disable nodejs -y
 
-Head "Adding Application User"
-if [ "$?" -ne 0 ]; then
-useradd expense &>>log_file
-fi
+    - name: Enable nodejs 18 version
+      ansible.builtin.shell: dnf module enable nodejs:18 -y
 
-App_prereq "/app"
+    - name: Install nodejs
+      ansible.builtin.dnf:
+        name: nodejs
+        state: installed
 
-Head "Downloading application content"
-npm install &>>log_file
-Stat $?
+    - name: Configure Backend.service
+      ansible.builtin.copy:
+        src: backend.service
+        dest:  /etc/systemd/system/backend.service
 
-Head "Reloading my application content and restarting service"
+    - name: Add Application User
+      ansible.builtin.user:
+        name: Expense
 
-systemctl daemon-reload &>>log_file
+    - name: Remove existing content
+      ansible.builtin.file:
+        path: /app
+        state: absent
 
-systemctl enable backend &>>log_file
-systemctl start backend &>>log_file
-systemctl restart backend &>>log_file
-Stat $?
-Head "Install mysql client"
+    - name: Create App Directory
+      ansible.builtin.file:
+        path: /app
+        state: directory
 
-dnf install mysql -y &>>log_file
-Stat $?
-mysql -h mysql-dev.jyothsnashrey.online -uroot -p${Mysql_Password} < /app/schema/backend.sql
-Stat $?
+    - name: Download and Extract app content
+      ansible.builtin.unarchive:
+        src: https://expense-artifacts.s3.amazonaws.com/backend.zip
+        dest: /app
+        remote_src: true
 
-#Mysql password ExpenseApp@1
+    - name: Download Dependencies
+      community.general.npm:
+        path: /app/location
+
+    - name: Reload system D and start backend service
+      ansible.builtin.systemd_service:
+        name: backend
+        state: restarted
+        enabled: yes
+
+    - name: Install mysql community server
+      ansible.builtin.dnf:
+        name: mysql
+        state: installed
+
+    - name: Load Schema
+      community.mysql.mysql_db:
+        state: import
+        name: all
+        target: /app/schema/backend.sql
+        login_user: root
+        Login_password: ExpenseApp@1
+        Login_host: mysql-dev.jyothsnashrey.online
