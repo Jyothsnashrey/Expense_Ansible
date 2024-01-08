@@ -49,9 +49,9 @@
     name: mysql
     state: installed
 
-- name: Install Phyton Library
+- name: Install Python Library
   ansible.builtin.dnf:
-    name: phyton3-pyMySQL
+    name: python3-pyMySQL
     state: installed
 
 
