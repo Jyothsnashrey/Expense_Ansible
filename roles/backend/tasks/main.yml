@@ -54,12 +54,17 @@
     name: python3-PyMySQL
     state: installed
 
-
 - name: Load Schema
   community.mysql.mysql_db:
     state: import
     name: all
     target: /app/schema/backend.sql
     login_user: root
-    Login_password: ExpenseApp@1
-    Login_host: mysql-dev.jyothsnashrey.online
+    login_password: ExpenseApp@1
+    login_host: mysql-dev.jyothsnashrey.online
+
+#- name: Load Schema
+#  community.mysql.mysql_db:
+#    state: import
+#    name: all
+#    target: /tmp/dump.sql
