@@ -8,7 +8,7 @@
     src: expense.conf
     dest: /etc/nginx/default.d/expense.conf
 
-- name: App Pre-requisites
+- name: App Pre-requisite
   ansible.builtin.include_role:
     name: Common
     tasks_from: App_prereq
