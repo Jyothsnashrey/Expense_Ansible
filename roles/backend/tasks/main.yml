@@ -51,7 +51,7 @@
 
 - name: Install Python Library
   ansible.builtin.dnf:
-    name: python3-pyMySQL
+    name: python3-PyMySQL
     state: installed
 
 
