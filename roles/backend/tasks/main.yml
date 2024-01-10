@@ -10,7 +10,7 @@
     state: installed
 
 - name: Configure Backend.service
-  ansible.builtin.copy:
+  ansible.builtin.template:
     src: backend.service
     dest:  /etc/systemd/system/backend.service
 
@@ -54,8 +54,3 @@
     login_password: "{{lookup('amazon.aws.aws_ssm', 'dev.mysql.root_password',region='us-east-1') }}"
     login_host: mysql-dev.jyothsnashrey.online
 
-#- name: Load Schema
-#  community.mysql.mysql_db:
-#    state: import
-#    name: all
-#    target: /tmp/dump.sql
