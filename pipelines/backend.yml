@@ -22,7 +22,7 @@ pipelines:
               tasks:
               - exec:
                   command: ansible-playbook
-                  arguments: ["-i","backend-dev.jyothsnashrey.online,", "-e", "ansible_user=centos", "-e",
+                  arguments: ["-i","172.31.38.137,", "-e", "ansible_user=centos", "-e",
                               "ansible_password=DevOps321","expense.yml","-e","service_name=backend","-e","env=dev" ]
 
 
