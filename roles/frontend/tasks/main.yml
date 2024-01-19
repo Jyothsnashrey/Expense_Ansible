@@ -11,7 +11,7 @@
 
 - name: App Pre-requisite
   ansible.builtin.include_role:
-    name: Common
+    name: common
     tasks_from: App_prereq
 
 - name: Start Nginx
