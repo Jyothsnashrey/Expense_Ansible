@@ -16,7 +16,7 @@
 
 - name: Add Application User
   ansible.builtin.user:
-    name: Expense
+    name: expense
 
 - name: App Pre-requisite
   ansible.builtin.include_role:
