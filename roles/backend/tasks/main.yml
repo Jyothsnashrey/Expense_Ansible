@@ -29,6 +29,11 @@
   community.general.npm:
     path: /app/location
 
+- name: Install New relic npm dependency
+  ansible.builtin.shell: npm install newrelic --save
+
+
+
 - name: Reload system D and start backend service
   ansible.builtin.systemd_service:
     name: backend
