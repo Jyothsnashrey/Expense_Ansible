@@ -32,7 +32,7 @@
 - name: Install New relic npm dependency
   ansible.builtin.shell: npm install newrelic --save
   args:
-      chdir: /app
+    chdir: /app
 
 
 
