@@ -45,8 +45,8 @@
     dest: /etc/rsyslog.d/{{component}}.conf
 
 
-- name: restart rsyslog
-  ansible.builtin.template:
+- name: Restart rsyslog
+  ansible.builtin.systemd_service:
     name: rsyslog
     state: restarted
 
