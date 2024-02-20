@@ -34,16 +34,6 @@
   args:
     chdir: /app
 
-
-
-
-- name: Reload system D and start backend service
-  ansible.builtin.systemd_service:
-    name: backend
-    state: restarted
-    enabled: yes
-    daemon-reload: yes
-
 - name: Install mysql client
   ansible.builtin.dnf:
     name: mysql
@@ -63,3 +53,9 @@
     login_password: "{{lookup('amazon.aws.aws_ssm','{{env}}.expense.rds.password',region='us-east-1') }}"  # loading schema to newly create RDS
     login_host: "{{lookup('amazon.aws.aws_ssm', '{{env}}.expense.rds.endpoint',region='us-east-1') }}"
 
+- name: Reload system D and start backend service
+  ansible.builtin.systemd_service:
+    name: backend
+    state: restarted
+    enabled: yes
+    daemon-reload: yes
