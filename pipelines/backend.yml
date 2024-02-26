@@ -28,10 +28,10 @@ pipelines:
                     arguments: [ "scripts/deployment.sh" ]
 
 
-              - exec:
-                  command: ansible-playbook
-                  arguments: ["-i","backend-dev.jyothsnashrey.online,", "-e", "ansible_user=centos", "-e",
-                              "ansible_password=DevOps321","expense.yml","-e","service_name=backend","-e","env=dev" "app_version=${app_version}" ]
+#              - exec:
+#                  command: ansible-playbook
+#                  arguments: ["-i","backend-dev.jyothsnashrey.online,", "-e", "ansible_user=centos", "-e",
+#                              "ansible_password=DevOps321","expense.yml","-e","service_name=backend","-e","env=dev" "app_version=${app_version}" ]
 
 
       - QA:
