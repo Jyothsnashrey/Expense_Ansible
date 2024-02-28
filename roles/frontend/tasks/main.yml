@@ -9,6 +9,11 @@
     src: expense.conf
     dest: /etc/nginx/default.d/expense.conf
 
+- name: Copy Nginx configuration file
+  ansible.builtin.template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+
 - name: App Pre-requisite
   ansible.builtin.include_role:
     name: common
